@@ -1,0 +1,9 @@
+[Plugin]
+Loader=python3
+Module=textstats
+IAge=3
+Name=Text Stats
+Description=Shows Text Statistics in Statusbar
+Authors=Benjamin S. Meyers <ben@lionlogic.org>
+Copyright=Copyright © 2016 Benjamin S. Meyers <ben@lionlogic.org>
+Website=https://github.com/meyersbs/gedit-text-stats
