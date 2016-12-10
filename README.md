@@ -1,7 +1,5 @@
 # gedit-text-stats
 
----
-### Description
 A plugin for gedit that shows useful text statistics in the status bar.
 
 ---
@@ -16,8 +14,12 @@ Sentence Count: `r"[\w-]+[\.!?]+\s"`
 ---
 ### Installation
 
-<b>Install Script Coming Soon!</b>
-
+``` bash
+    wget https://raw.githubusercontent.com/meyersbs/gedit-text-stats/master/install.sh
+    chmod +x install.sh
+    ./install.sh
+```
+OR
 ``` bash
     cd ~/.local/share
     mkdir gedit
