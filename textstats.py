@@ -10,6 +10,7 @@ from gi.repository import GObject, Gtk, Gedit # pylint: disable=E0611
 WORD_RE = re.compile(r"[\w-]+")
 SENT_RE = re.compile(r"[\w-]+[\.!?]+\s")
 CHAR_RE = re.compile(r"[\S]{1}")
+LINE_RE = re.compile(r"[\n\r]")
 
 def get_text(doc):
     """ Get the document text. """
@@ -27,26 +28,31 @@ class TextstatsPlugin(GObject.Object, Gedit.WindowActivatable):
         self._cc_label = Gtk.Label()
         self._wc_label = Gtk.Label()
         self._sc_label = Gtk.Label()
+        self._lc_label = Gtk.Label()
 
     def do_activate(self):
         """ This gets called when the plugin is activated. It attaches my labels to the Gedit statusbar and turns them on. """
         self.window.get_statusbar().pack_end(self._cc_label, False, False, 5) # expand=False, fill=False, padding=5
         self.window.get_statusbar().pack_end(self._wc_label, False, False, 5) # expand=False, fill=False, padding=5
         self.window.get_statusbar().pack_end(self._sc_label, False, False, 5) # expand=False, fill=False, padding=5
+        self.window.get_statusbar().pack_end(self._lc_label, False, False, 5) # expand=False, fill=False, padding=5
         self._cc_label.show()
         self._wc_label.show()
         self._sc_label.show()
+        self._lc_label.show()
 
     def do_deactivate(self):
         """ This gets called when the plugin is activated. It turns off my labels. """
         Gtk.Container.remove(self.window.get_statusbar(), self._cc_label)
         Gtk.Container.remove(self.window.get_statusbar(), self._wc_label)
         Gtk.Container.remove(self.window.get_statusbar(), self._sc_label)
+        Gtk.Container.remove(self.window.get_statusbar(), self._lc_label)
         if self._doc_changed_id:
             self._doc_changed_id[0].disconnect(self._doc_changed_id[1])
         del self._cc_label
         del self._wc_label
         del self._sc_label
+        del self._lc_label
 
     def do_update_state(self):
         """ Updates the state. """
@@ -60,6 +66,7 @@ class TextstatsPlugin(GObject.Object, Gedit.WindowActivatable):
             self._cc_label.set_text('')
             self._wc_label.set_text('')
             self._sc_label.set_text('')
+            self._lc_label.set_text('')
     
     def on_document_changed(self, doc):
         """ This gets called when the contents of the document have changed. """
@@ -74,4 +81,5 @@ class TextstatsPlugin(GObject.Object, Gedit.WindowActivatable):
         self._wc_label.set_text(msg)
         msg = 'SentCount: {0}'.format(len(SENT_RE.findall(txt)))
         self._sc_label.set_text(msg)
-
+        msg = 'LineCount: {0}'.format(len(LINE_RE.findall(txt)+1))
+        self._lc_label.set_text(msg)
